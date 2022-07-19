@@ -10,4 +10,17 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_request">New Request</string>
+    <string name="url_example">https://example.com</string>
+    <string name="query">Query</string>
+    <string name="header">Header</string>
+    <string name="auth">Auth</string>
+    <string name="body">Body</string>
+    <string name="send">SEND</string>
+    <string-array name="method_list">
+        <item>GET</item>
+        <item>POST</item>
+        <item>PUT</item>
+        <item>DELETE</item>
+    </string-array>
 </resources>
