@@ -23,4 +23,14 @@
         <item>PUT</item>
         <item>DELETE</item>
     </string-array>
+    <string name="success">200 OK</string>
+    <string name="size">Size :</string>
+    <string name="_10_8kb">10.8KB</string>
+    <string name="time">Time :</string>
+    <string name="_20_ms">20 ms</string>
+    <string name="response">Response</string>
+    <string name="headers">Headers</string>
+    <string name="cookies">Cookies</string>
+    <string name="status">Status :</string>
+    <string name="draggable_line">Draggable Line</string>
 </resources>

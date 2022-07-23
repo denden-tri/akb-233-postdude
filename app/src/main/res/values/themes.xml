@@ -19,6 +19,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.PostdudeClient.TextResponseValue" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:layout_marginStart">4dp</item>
+    </style>
+
     <style name="Theme.PostdudeClient.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.PostdudeClient.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

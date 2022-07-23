@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
     tools:context=".ui.request.RequestFragment">
 
     <androidx.appcompat.widget.AppCompatSpinner
@@ -22,13 +21,14 @@
         android:hint="@string/url_example"
         android:minHeight="48dp"
         android:textColorHint="#757575"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/req_method"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/req_method"
         app:layout_constraintTop_toTopOf="@+id/req_method" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/req_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/req_method"
@@ -55,6 +55,30 @@
             android:text="@string/body" />
     </com.google.android.material.tabs.TabLayout>
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/req_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/req_send_btn"
+        app:layout_constraintTop_toBottomOf="@+id/req_tab" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/fragment_response_dialog" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_menu_camera"
+            app:layout_anchor="@+id/res_bottom_sheet_constrain"
+            app:layout_anchorGravity="top|end" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/req_send_btn"
         android:layout_width="match_parent"
@@ -62,4 +86,5 @@
         android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
          />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
