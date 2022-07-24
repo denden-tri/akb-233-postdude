@@ -11,7 +11,7 @@
         style="?attr/bottomSheetStyle"
         android:padding="8dp"
         app:behavior_peekHeight="150dp"
-        android:background="@color/white"
+        android:background="?attr/colorOnPrimary"
         >
         <ImageView
             android:id="@+id/req_img_break_point"
