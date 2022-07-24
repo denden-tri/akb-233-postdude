@@ -65,6 +65,7 @@ public class ResponseDialogFragment extends BottomSheetDialogFragment {
         @Override
         public Fragment createFragment(int position) {
             // Return a NEW fragment instance in createFragment(int)
+            if (position == 0) return new ResponseFragment();
             return new DemoObjectFragment();
         }
 
@@ -106,7 +107,6 @@ public class ResponseDialogFragment extends BottomSheetDialogFragment {
         behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
             }
 
             @Override

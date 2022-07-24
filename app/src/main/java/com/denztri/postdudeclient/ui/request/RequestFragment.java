@@ -1,6 +1,8 @@
 package com.denztri.postdudeclient.ui.request;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,29 +14,41 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.android.volley.Request;
 import com.denztri.postdudeclient.R;
 import com.denztri.postdudeclient.databinding.FragmentRequestBinding;
 import com.denztri.postdudeclient.ui.response.ResponseDialogFragment;
+import com.denztri.postdudeclient.ui.response.ResponseViewModel;
+import com.denztri.postdudeclient.utils.RequestBuilder;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.io.IOException;
+import java.util.concurrent.Executors;
 
 public class RequestFragment extends Fragment {
 
     private FragmentRequestBinding binding;
 
-    private BottomSheetBehavior sheetBehavior;
+    private BottomSheetBehavior<ConstraintLayout> sheetBehavior;
+    private ResponseViewModel resViewModel;
+    RequestBuilder requestBuilder = new RequestBuilder();
+
+
+
+    private int method;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRequestBinding.inflate(inflater, container, false);
+        resViewModel = new ViewModelProvider(requireActivity()).get(ResponseViewModel.class);
 
         return binding.getRoot();
     }
@@ -66,15 +80,12 @@ public class RequestFragment extends Fragment {
         showReqTab();
         showResTab();
 
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-            boolean vis = insets.isVisible(WindowInsetsCompat.Type.ime());
-            Log.d("IME visible", String.valueOf(vis));
-
-            return insets;
+        binding.reqSendBtn.setOnClickListener(view1 -> {
+            requireActivity().findViewById(R.id.res_frag_progressbar).setVisibility(View.VISIBLE);
+            requireActivity().findViewById(R.id.res_frag_text).setVisibility(View.INVISIBLE);
+            sendRequest();
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
-
-
-        binding.reqSendBtn.setOnClickListener(view1 -> sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
     }
 
     @Override
@@ -139,6 +150,7 @@ public class RequestFragment extends Fragment {
         @Override
         public Fragment createFragment(int position) {
             // Return a NEW fragment instance in createFragment(int)
+
             return new ResponseDialogFragment.DemoObjectFragment();
         }
 
@@ -146,5 +158,32 @@ public class RequestFragment extends Fragment {
         public int getItemCount() {
             return 4;
         }
+    }
+
+    private void getHttpMethod(String choice){
+        switch (choice){
+            case "GET":
+                method = Request.Method.GET;
+                break;
+            case "POST":
+                method = Request.Method.POST;
+                break;
+            case "PUT":
+                method = Request.Method.PUT;
+                break;
+            case "DELETE":
+                method = Request.Method.DELETE;
+        }
+    }
+
+    private void sendRequest(){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
+                new Handler(Looper.getMainLooper()).post(() -> resViewModel.setResponseBody(wow));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
