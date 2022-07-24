@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Postdude</title>
+    <script type="module" crossorigin src="/assets/index.5a0b715c.js"></script>
+    <link rel="stylesheet" href="/assets/index.d10a694a.css">
+  </head>
+  <body>
+    <div id="app">
+      <div class="tab-content p-3 border-top-0 border">
+        <div
+          class="tab-pane fade show active"
+          id="body"
+          role="tabpanel"
+          aria-labelledby="body-tab"
+        >
+          <div
+            data-json-response-body
+            class="overflow-auto"
+            style="max-height: 90vh; max-width : 100vw"
+          ></div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="response-headers"
+          role="tabpanel"
+          aria-labelledby="response-headers-tab"
+        >
+          <div
+            style="
+              display: grid;
+              grid-template-columns: auto 1fr;
+              gap: 0.5rem 2rem;
+            "
+            data-response-headers
+          ></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

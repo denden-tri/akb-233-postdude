@@ -82,7 +82,7 @@ public class RequestFragment extends Fragment {
 
         binding.reqSendBtn.setOnClickListener(view1 -> {
             requireActivity().findViewById(R.id.res_frag_progressbar).setVisibility(View.VISIBLE);
-            requireActivity().findViewById(R.id.res_frag_text).setVisibility(View.INVISIBLE);
+            requireActivity().findViewById(R.id.res_frag_webview).setVisibility(View.INVISIBLE);
             sendRequest();
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
@@ -97,8 +97,9 @@ public class RequestFragment extends Fragment {
     private void showResTab(){
         ViewPager2 resPager = requireActivity().findViewById(R.id.res_pager);
         TabLayout resTab = requireActivity().findViewById(R.id.res_tab);
-        ResponseDialogFragment.DemoCollectionAdapter demoCollectionAdapter = new ResponseDialogFragment.DemoCollectionAdapter(this);
+        ResponseDialogFragment.DemoCollectionAdapter demoCollectionAdapter = new ResponseDialogFragment.DemoCollectionAdapter(this,requireActivity());
         resPager.setAdapter(demoCollectionAdapter);
+        resPager.setUserInputEnabled(false);
         new TabLayoutMediator(resTab, resPager,
                 (tab, position) -> {
                     switch (position){
@@ -179,7 +180,7 @@ public class RequestFragment extends Fragment {
     private void sendRequest(){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
+                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/");
                 new Handler(Looper.getMainLooper()).post(() -> resViewModel.setResponseBody(wow));
             } catch (IOException e) {
                 e.printStackTrace();

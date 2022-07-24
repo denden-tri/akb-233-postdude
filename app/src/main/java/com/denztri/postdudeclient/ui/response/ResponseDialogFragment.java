@@ -1,6 +1,7 @@
 package com.denztri.postdudeclient.ui.response;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -57,15 +58,18 @@ public class ResponseDialogFragment extends BottomSheetDialogFragment {
     }
 
     public static class DemoCollectionAdapter extends FragmentStateAdapter {
-        public DemoCollectionAdapter(Fragment fragment) {
+        private final Context context;
+
+        public DemoCollectionAdapter(Fragment fragment, Context context) {
             super(fragment);
+            this.context = context;
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
             // Return a NEW fragment instance in createFragment(int)
-            if (position == 0) return new ResponseFragment();
+            if (position == 0) return new ResponseFragment(context);
             return new DemoObjectFragment();
         }
 
