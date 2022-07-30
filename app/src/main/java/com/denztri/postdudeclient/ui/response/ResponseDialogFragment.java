@@ -70,6 +70,7 @@ public class ResponseDialogFragment extends BottomSheetDialogFragment {
         public Fragment createFragment(int position) {
             // Return a NEW fragment instance in createFragment(int)
             if (position == 0) return new ResponseFragment(context);
+            if (position == 1) return new HeadersFragment(context);
             return new DemoObjectFragment();
         }
 

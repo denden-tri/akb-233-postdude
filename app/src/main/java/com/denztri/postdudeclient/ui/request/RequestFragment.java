@@ -180,8 +180,11 @@ public class RequestFragment extends Fragment {
     private void sendRequest(){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/");
-                new Handler(Looper.getMainLooper()).post(() -> resViewModel.setResponseBody(wow));
+                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),requestBuilder.getCookie());
+                    resViewModel.setHeaders(requestBuilder.getHeaders());
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
