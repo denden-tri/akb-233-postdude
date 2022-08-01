@@ -38,6 +38,8 @@ public class RequestBuilder {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+            setHeaders(response.headers().toString());
+            setCookie(response.headers("Set-Cookie").toString());
             return response.body().string();
         }
     }

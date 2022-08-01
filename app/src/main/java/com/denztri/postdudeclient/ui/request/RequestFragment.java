@@ -180,7 +180,11 @@ public class RequestFragment extends Fragment {
     private void sendRequest(){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
+//                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
+                String wow = requestBuilder.run("https://delichip-api.herokuapp.com/owner/auth","{\n" +
+                        "    \"username\" : \"tafriyadi27\",\n" +
+                        "    \"password\" : \"j7Kseee7ZDLxI\"\n" +
+                        "}");
                 new Handler(Looper.getMainLooper()).post(() -> {
                     resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),requestBuilder.getCookie());
                     resViewModel.setHeaders(requestBuilder.getHeaders());
