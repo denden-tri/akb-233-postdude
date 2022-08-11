@@ -16,6 +16,9 @@ public class RequestBuilder {
 
     public String headers;
     public String cookie;
+    public int code;
+    public String codeStaus;
+    public long contentLength;
 
 
 
@@ -27,6 +30,9 @@ public class RequestBuilder {
         try (Response response = client.newCall(request).execute()) {
             setHeaders(response.headers().toString());
             setCookie(response.headers("Set-Cookie").toString());
+            setCode(response.code());
+            setContentLength(response.body().contentLength());
+            Log.d("CONTENT LENG",String.valueOf(response.body().contentLength()));
             return response.body().string();
         }
     }
@@ -40,6 +46,8 @@ public class RequestBuilder {
         try (Response response = client.newCall(request).execute()) {
             setHeaders(response.headers().toString());
             setCookie(response.headers("Set-Cookie").toString());
+            setCode(response.code());
+            setContentLength(response.body().contentLength());
             return response.body().string();
         }
     }
@@ -58,5 +66,29 @@ public class RequestBuilder {
 
     public void setCookie(String cookie) {
         this.cookie = cookie;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getCodeStaus() {
+        return codeStaus;
+    }
+
+    public void setCodeStaus(String codeStaus) {
+        this.codeStaus = codeStaus;
+    }
+
+    public long getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(long contentLength) {
+        this.contentLength = contentLength;
     }
 }

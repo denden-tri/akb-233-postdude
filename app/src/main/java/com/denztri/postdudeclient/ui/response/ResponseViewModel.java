@@ -24,8 +24,10 @@ public class ResponseViewModel extends ViewModel {
         return responseBody;
     }
 
-    public void setResponseBody(String responseBody, String responseHeaders, String responseCookie) {
-        data.setValue(Arrays.asList(responseBody,responseHeaders,responseCookie));
+    public void setResponseBody(String responseBody, String responseHeaders,
+                                String responseCookie, String code,
+                                String cntLength) {
+        data.setValue(Arrays.asList(responseBody,responseHeaders,responseCookie, code,cntLength));
         this.responseBody = responseBody;
     }
 

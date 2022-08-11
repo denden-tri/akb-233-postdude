@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.webkit.WebViewAssetLoader;
 
+import com.denztri.postdudeclient.R;
 import com.denztri.postdudeclient.databinding.FragmentResponseBinding;
 import com.denztri.postdudeclient.utils.LocalContentWebViewClient;
 
@@ -60,6 +62,12 @@ public class ResponseFragment extends Fragment {
             try {
                 String postData = "data=" + URLEncoder.encode(s.get(0), "UTF-8");
                 String postCookie = "dataCookie="+ URLEncoder.encode(s.get(2), "UTF-8");
+                String code = s.get(3);
+                String contentLength = s.get(4);
+                TextView resCode = requireActivity().findViewById(R.id.res_status_value);
+                TextView resLength =  requireActivity().findViewById(R.id.res_size_value);
+//                resLength.setText(contentLength);
+                resCode.setText(code);
                 webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?" +
                         postData);
             } catch (UnsupportedEncodingException e) {

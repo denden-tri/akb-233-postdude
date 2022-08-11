@@ -54,7 +54,7 @@
             app:layout_constraintTop_toTopOf="@+id/res_status_label" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/res_size_value"
             style="@style/Theme.PostdudeClient.TextResponseValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="@string/time"
             app:layout_constraintBottom_toBottomOf="@+id/res_status_label"
-            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/res_size_value"
             app:layout_constraintTop_toTopOf="@+id/res_status_label" />
 
         <TextView

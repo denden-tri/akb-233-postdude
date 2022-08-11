@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 public class RequestFragment extends Fragment {
@@ -42,7 +45,7 @@ public class RequestFragment extends Fragment {
 
 
 
-    private int method;
+    private int method = Request.Method.GET;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -65,6 +68,8 @@ public class RequestFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getHttpMethod(adapterView.getItemAtPosition(i).toString());
+
                 Log.d("SELECTED", adapterView.getItemAtPosition(i).toString());
             }
 
@@ -83,7 +88,16 @@ public class RequestFragment extends Fragment {
         binding.reqSendBtn.setOnClickListener(view1 -> {
             requireActivity().findViewById(R.id.res_frag_progressbar).setVisibility(View.VISIBLE);
             requireActivity().findViewById(R.id.res_frag_webview).setVisibility(View.INVISIBLE);
-            sendRequest();
+            String url = Objects.requireNonNull(binding.reqUrl.getText()).toString();
+            if (url.isEmpty()) {
+                Toast.makeText(requireActivity(), "Isi dulu url nya",Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (method == Request.Method.GET) sendGetRequest(url);
+            if (method == Request.Method.POST) sendPostRequest(url, "{\n" +
+                    "    \"username\" : \"tafriyadi27\",\n" +
+                    "    \"password\" : \"j7Kseee7ZDLxI\"\n" +
+                    "}");
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
     }
@@ -177,17 +191,42 @@ public class RequestFragment extends Fragment {
         }
     }
 
-    private void sendRequest(){
+    private void sendGetRequest(String url){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-//                String wow = requestBuilder.run("https://jsonplaceholder.typicode.com/posts/1");
-                String wow = requestBuilder.run("https://delichip-api.herokuapp.com/owner/auth","{\n" +
-                        "    \"username\" : \"tafriyadi27\",\n" +
-                        "    \"password\" : \"j7Kseee7ZDLxI\"\n" +
-                        "}");
+                long startTime = System.nanoTime();
+                String wow = requestBuilder.run(url);
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),requestBuilder.getCookie());
+                    resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),requestBuilder.getCookie(),
+                            String.valueOf(requestBuilder.code),
+                            String.valueOf(requestBuilder.getContentLength()));
                     resViewModel.setHeaders(requestBuilder.getHeaders());
+                    long elapsedTime = System.nanoTime() - startTime;
+                    TextView resTime = requireActivity().findViewById(R.id.res_time_value);
+                    String resTimeMs = (elapsedTime / 1000000) + " ms";
+                    resTime.setText(resTimeMs);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void sendPostRequest(String url, String data){
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                long startTime = System.nanoTime();
+                String wow = requestBuilder.run(url,data);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),
+                            requestBuilder.getCookie(),
+                            String.valueOf(requestBuilder.code),
+                            String.valueOf(requestBuilder.getContentLength()));
+                    resViewModel.setHeaders(requestBuilder.getHeaders());
+                    long elapsedTime = System.nanoTime() - startTime;
+                    TextView resTime = requireActivity().findViewById(R.id.res_time_value);
+                    String resTimeMs = (elapsedTime / 1000000) + " ms";
+                    resTime.setText(resTimeMs);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
