@@ -22,8 +22,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Request;
+import com.denztri.postdudeclient.MainActivity;
 import com.denztri.postdudeclient.R;
+import com.denztri.postdudeclient.database.entity.RequestHistoryModel;
 import com.denztri.postdudeclient.databinding.FragmentRequestBinding;
+import com.denztri.postdudeclient.ui.history.HistoryViewModel;
 import com.denztri.postdudeclient.ui.response.ResponseDialogFragment;
 import com.denztri.postdudeclient.ui.response.ResponseViewModel;
 import com.denztri.postdudeclient.utils.RequestBuilder;
@@ -42,17 +45,19 @@ public class RequestFragment extends Fragment {
     private BottomSheetBehavior<ConstraintLayout> sheetBehavior;
     private ResponseViewModel resViewModel;
     RequestBuilder requestBuilder = new RequestBuilder();
+    private HistoryViewModel historyViewModel;
 
 
 
     private int method = Request.Method.GET;
+    private String methodStr;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRequestBinding.inflate(inflater, container, false);
         resViewModel = new ViewModelProvider(requireActivity()).get(ResponseViewModel.class);
-
+        historyViewModel = new ViewModelProvider(requireActivity()).get(HistoryViewModel.class);
         return binding.getRoot();
     }
 
@@ -69,7 +74,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getHttpMethod(adapterView.getItemAtPosition(i).toString());
-
+                methodStr = adapterView.getItemAtPosition(i).toString();
                 Log.d("SELECTED", adapterView.getItemAtPosition(i).toString());
             }
 
@@ -93,11 +98,13 @@ public class RequestFragment extends Fragment {
                 Toast.makeText(requireActivity(), "Isi dulu url nya",Toast.LENGTH_LONG).show();
                 return;
             }
+
             if (method == Request.Method.GET) sendGetRequest(url);
             if (method == Request.Method.POST) sendPostRequest(url, "{\n" +
                     "    \"username\" : \"tafriyadi27\",\n" +
                     "    \"password\" : \"j7Kseee7ZDLxI\"\n" +
                     "}");
+            saveToDb(methodStr,url);
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
     }
@@ -232,5 +239,9 @@ public class RequestFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void saveToDb(String method, String url){
+       historyViewModel.insertOne(new RequestHistoryModel(url, method));
     }
 }

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.denztri.postdudeclient.database.AppDatabase;
 import com.denztri.postdudeclient.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
@@ -19,13 +20,16 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    public AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = AppDatabase.getInstance(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_request, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_request, R.id.nav_gallery,R.id.nav_history, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);

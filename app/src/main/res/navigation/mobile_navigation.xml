@@ -12,6 +12,13 @@
         tools:layout="@layout/fragment_request" />
 
     <fragment
+        android:id="@+id/nav_history"
+        android:name="com.denztri.postdudeclient.ui.history.HistoryFragment"
+        android:label="Request History"
+        tools:layout="@layout/fragment_history"
+        />
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="com.denztri.postdudeclient.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
