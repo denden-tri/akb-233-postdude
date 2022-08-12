@@ -22,7 +22,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Request;
-import com.denztri.postdudeclient.MainActivity;
 import com.denztri.postdudeclient.R;
 import com.denztri.postdudeclient.database.entity.RequestHistoryModel;
 import com.denztri.postdudeclient.databinding.FragmentRequestBinding;
@@ -58,6 +57,7 @@ public class RequestFragment extends Fragment {
         binding = FragmentRequestBinding.inflate(inflater, container, false);
         resViewModel = new ViewModelProvider(requireActivity()).get(ResponseViewModel.class);
         historyViewModel = new ViewModelProvider(requireActivity()).get(HistoryViewModel.class);
+
         return binding.getRoot();
     }
 
@@ -69,6 +69,15 @@ public class RequestFragment extends Fragment {
                 R.array.method_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey("METHOD") && arguments.containsKey("URL")){
+            String methodStr = arguments.getString("METHOD");
+            getHttpMethod(methodStr);
+            binding.reqUrl.setText(arguments.getString("URL"));
+            int spinnerPos = adapter.getPosition(methodStr);
+            binding.reqMethod.setSelection(spinnerPos);
+        }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

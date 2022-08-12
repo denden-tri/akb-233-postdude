@@ -3,6 +3,7 @@ package com.denztri.postdudeclient.ui.history;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.url.setText(historyModels.get(position).getUrl());
         holder.method.setText(historyModels.get(position).getHttpMethod());
         holder.constraintLayout.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(R.id.nav_request);
+            Bundle bundle = new Bundle();
+            bundle.putString("URL", historyModels.get(holder.getAdapterPosition()).getUrl());
+            bundle.putString("METHOD", historyModels.get(holder.getAdapterPosition()).getHttpMethod());
+            Navigation.findNavController(view).navigate(R.id.nav_request, bundle);
         });
     }
 
