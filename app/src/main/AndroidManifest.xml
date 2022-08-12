@@ -16,7 +16,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.PostdudeClient.NoActionBar"
+            android:theme="@style/Theme.PostdudeClient.Starting"
             android:windowSoftInputMode="adjustResize"
             >
             <intent-filter>
