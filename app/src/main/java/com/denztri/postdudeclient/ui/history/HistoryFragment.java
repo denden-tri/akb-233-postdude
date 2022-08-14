@@ -29,7 +29,8 @@ public class HistoryFragment extends Fragment {
 
         initRecycler();
 
-        mViewModel.getAllHistory().observe(getViewLifecycleOwner(), requestHistoryModels -> historyAdapter.setHistoryModels(requestHistoryModels));
+        mViewModel.getAllHistory().observe(getViewLifecycleOwner(), requestHistoryModels ->
+                historyAdapter.setHistoryModels(requestHistoryModels));
 
         return binding.getRoot();
     }
