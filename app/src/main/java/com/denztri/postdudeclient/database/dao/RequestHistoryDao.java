@@ -10,7 +10,7 @@ import java.util.List;
 
 @Dao
 public interface RequestHistoryDao {
-    @Query("SELECT * FROM RequestHistoryModel")
+    @Query("SELECT * FROM RequestHistoryModel ORDER BY id DESC")
     List<RequestHistoryModel> getAllHistory();
 
     @Insert
