@@ -39,4 +39,10 @@
     <string name="history">History</string>
     <string name="work_in_progress">Work In Progress</string>
     <string name="WIP">Feature not yet available</string>
+    <string name="add_button">add query_params</string>
+    <string name="value_of_query_params">value of query params</string>
+    <string name="key_of_query_params">key of query params</string>
+    <string name="value">Value</string>
+    <string name="key">Key</string>
+    <string name="remove_button">remove query params</string>
 </resources>

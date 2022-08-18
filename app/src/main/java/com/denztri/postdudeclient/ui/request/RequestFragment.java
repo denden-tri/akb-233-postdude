@@ -3,7 +3,6 @@ package com.denztri.postdudeclient.ui.request;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,9 @@ import com.denztri.postdudeclient.R;
 import com.denztri.postdudeclient.database.entity.RequestHistoryModel;
 import com.denztri.postdudeclient.databinding.FragmentRequestBinding;
 import com.denztri.postdudeclient.ui.history.HistoryViewModel;
+import com.denztri.postdudeclient.ui.query.QueryFragment;
+import com.denztri.postdudeclient.ui.query.QueryModel;
+import com.denztri.postdudeclient.ui.query.QueryViewModel;
 import com.denztri.postdudeclient.ui.response.ResponseDialogFragment;
 import com.denztri.postdudeclient.ui.response.ResponseViewModel;
 import com.denztri.postdudeclient.utils.RequestBuilder;
@@ -34,6 +36,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
@@ -45,7 +48,7 @@ public class RequestFragment extends Fragment {
     private ResponseViewModel resViewModel;
     RequestBuilder requestBuilder = new RequestBuilder();
     private HistoryViewModel historyViewModel;
-
+    private QueryViewModel queryViewModel;
 
 
     private int method = Request.Method.GET;
@@ -57,7 +60,7 @@ public class RequestFragment extends Fragment {
         binding = FragmentRequestBinding.inflate(inflater, container, false);
         resViewModel = new ViewModelProvider(requireActivity()).get(ResponseViewModel.class);
         historyViewModel = new ViewModelProvider(requireActivity()).get(HistoryViewModel.class);
-
+        queryViewModel = new ViewModelProvider(requireActivity()).get(QueryViewModel.class);
         return binding.getRoot();
     }
 
@@ -84,7 +87,6 @@ public class RequestFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getHttpMethod(adapterView.getItemAtPosition(i).toString());
                 methodStr = adapterView.getItemAtPosition(i).toString();
-                Log.d("SELECTED", adapterView.getItemAtPosition(i).toString());
             }
 
             @Override
@@ -107,9 +109,9 @@ public class RequestFragment extends Fragment {
                 Toast.makeText(requireActivity(), "Isi dulu url nya",Toast.LENGTH_LONG).show();
                 return;
             }
-
-            if (method == Request.Method.GET) sendGetRequest(url);
-            if (method == Request.Method.POST) sendPostRequest(url, "{\n" +
+            List<QueryModel> query = queryViewModel.getList();
+            if (method == Request.Method.GET) sendGetRequest(url, query);
+            if (method == Request.Method.POST) sendPostRequest(url,query, "{\n" +
                     "    \"username\" : \"tafriyadi27\",\n" +
                     "    \"password\" : \"j7Kseee7ZDLxI\"\n" +
                     "}");
@@ -181,7 +183,7 @@ public class RequestFragment extends Fragment {
         @Override
         public Fragment createFragment(int position) {
             // Return a NEW fragment instance in createFragment(int)
-
+            if (position == 0) return new QueryFragment();
             return new ResponseDialogFragment.DemoObjectFragment();
         }
 
@@ -207,11 +209,11 @@ public class RequestFragment extends Fragment {
         }
     }
 
-    private void sendGetRequest(String url){
+    private void sendGetRequest(String url, List<QueryModel> query){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 long startTime = System.nanoTime();
-                String wow = requestBuilder.run(url);
+                String wow = requestBuilder.run(url, query);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),requestBuilder.getCookie(),
                             String.valueOf(requestBuilder.code),
@@ -228,11 +230,11 @@ public class RequestFragment extends Fragment {
         });
     }
 
-    private void sendPostRequest(String url, String data){
+    private void sendPostRequest(String url, List<QueryModel> query, String data){
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 long startTime = System.nanoTime();
-                String wow = requestBuilder.run(url,data);
+                String wow = requestBuilder.run(url,query, data);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     resViewModel.setResponseBody(wow,requestBuilder.getHeaders(),
                             requestBuilder.getCookie(),

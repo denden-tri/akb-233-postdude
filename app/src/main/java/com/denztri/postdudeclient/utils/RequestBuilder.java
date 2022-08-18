@@ -2,8 +2,14 @@ package com.denztri.postdudeclient.utils;
 
 import android.util.Log;
 
-import java.io.IOException;
+import com.denztri.postdudeclient.ui.query.QueryModel;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,11 +28,16 @@ public class RequestBuilder {
 
 
 
-    public String run(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+    public String run(String url, List<QueryModel> query) throws IOException {
+        HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        if (!query.get(0).getKey().isEmpty()) {
+            query.forEach(queryModel -> httpBuilder.addQueryParameter(queryModel.getKey(),queryModel.getValue()));
+        }
 
+        Request request = new Request.Builder()
+                .url(httpBuilder.build())
+                .build();
+        Log.d("HTTPMEMEK", httpBuilder.build().toString());
         try (Response response = client.newCall(request).execute()) {
             setHeaders(response.headers().toString());
             setCookie(response.headers("Set-Cookie").toString());
@@ -37,8 +48,12 @@ public class RequestBuilder {
         }
     }
 
-    public String run(String url, String jsonBody) throws IOException{
+    public String run(String url,List<QueryModel> query, String jsonBody) throws IOException{
         RequestBody body = RequestBody.create(jsonBody, JSON);
+        HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        if (!query.get(0).getKey().isEmpty()) {
+            query.forEach(queryModel -> httpBuilder.addQueryParameter(queryModel.getKey(),queryModel.getValue()));
+        }
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
